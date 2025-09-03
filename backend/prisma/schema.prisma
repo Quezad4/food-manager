@@ -15,3 +15,17 @@ model Produto {
 
   @@map("produto")
 }
+
+model Usuario {
+  id        Int       @id @default(autoincrement())
+  nome      String
+  cargo     String
+  telefone  String?
+  foto      String?
+  user      String    @unique     // login único
+  senha     String                 // armazenada com hash (bcrypt)
+  isAdmin   Boolean   @default(false)
+
+
+  @@map("usuario")
+}
