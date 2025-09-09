@@ -1,0 +1,37 @@
+// comanda/comanda.controller.ts
+import { Body, Controller, Get, Param, Patch, Post, UseGuards } from '@nestjs/common';
+import { ComandaService } from './comanda.service';
+import { CreateComandaDto } from './dto/create-comanda.dto';
+import { AdicionarItemDto } from './dto/create-comanda.dto';
+import { JwtAuthGuard } from 'src/auth/jwt-auth.guard';
+
+
+@UseGuards(JwtAuthGuard)
+@Controller('comandas')
+export class ComandaController {
+  constructor(private service: ComandaService) { }
+
+  @Post('abrir')
+  abrir(@Body() dto: CreateComandaDto) { return this.service.abrir(dto.usuarioId); }
+
+  @Post('adicionar-item')
+  adicionar(@Body() dto: AdicionarItemDto) {
+    return this.service.adicionarItem(dto.comandaId, dto.produtoId, dto.quantidade);
+  }
+
+  // Controller
+  @Patch(':comandaId/remover-item/:itemId')
+  remover(
+    @Param('comandaId') comandaId: string,
+    @Param('itemId') itemId: string,
+  ) {
+    return this.service.removerItem(+comandaId, +itemId);
+  }
+
+
+  @Get()
+  listar() { return this.service.listar(); }
+
+  @Patch('fechar/:id')
+  fechar(@Param('id') id: string) { return this.service.fechar(+id); }
+}

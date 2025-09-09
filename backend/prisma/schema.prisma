@@ -7,11 +7,19 @@ datasource db {
   url      = env("DATABASE_URL") 
 }
 
+enum StatusComanda {
+  ABERTA
+  FECHADA
+  CANCELADA
+}
+
 model Produto {
   id         Int     @id @default(autoincrement())
   nome       String
   descricao  String? 
   preco      Decimal @db.Decimal(10, 2)
+
+  itens      ItemComanda[]
 
   @@map("produto")
 }
@@ -26,6 +34,36 @@ model Usuario {
   senha     String                 // armazenada com hash (bcrypt)
   isAdmin   Boolean   @default(false)
 
+  comandas  Comanda[]
+
 
   @@map("usuario")
+}
+
+model Comanda {
+  id          Int            @id @default(autoincrement())
+  usuarioId   Int
+  status      StatusComanda  @default(ABERTA)
+  criadaEm    DateTime       @default(now())
+  fechadaEm   DateTime?
+  total       Decimal        @db.Decimal(12,2) @default(0)
+
+  usuario     Usuario        @relation(fields: [usuarioId], references: [id])
+  itens       ItemComanda[]
+
+  @@map("comanda")
+}
+
+model ItemComanda {
+  id            Int       @id @default(autoincrement())
+  comandaId     Int
+  produtoId     Int
+  quantidade    Int
+  precoUnitario Decimal   @db.Decimal(10,2) 
+  subtotal      Decimal   @db.Decimal(12,2) 
+
+  comanda       Comanda   @relation(fields: [comandaId], references: [id])
+  produto       Produto   @relation(fields: [produtoId], references: [id])
+
+  @@map("item_comanda")
 }

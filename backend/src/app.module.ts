@@ -7,9 +7,10 @@ import { ProdutoModule } from './produto/produto.module';
 import { ProdutoService } from './produto/produto.service';
 import { ProdutoController } from './produto/produto.controller';
 import { UsuarioModule } from './usuario/usuario.module';
+import { ComandaModule } from './comanda/comanda.module';
 
 @Module({
-  imports: [AuthModule, PrismaModule, ProdutoModule, UsuarioModule],
+  imports: [AuthModule, PrismaModule, ProdutoModule, UsuarioModule, ComandaModule],
   controllers: [AppController, ProdutoController],
   providers: [AppService, ProdutoService,],
 })
