@@ -5,7 +5,7 @@ import { Prisma } from '@prisma/client';
 
 @Injectable()
 export class ComandaService {
-  constructor(private prisma: PrismaService) {}
+  constructor(private prisma: PrismaService) { }
 
   async abrir(usuarioId: number) {
     // valida se usuário existe
@@ -22,13 +22,32 @@ export class ComandaService {
       const produto = await tx.produto.findUnique({ where: { id: produtoId } });
       if (!produto) throw new NotFoundException('Produto inexistente');
 
-      const precoUnitario = new Prisma.Decimal(produto.preco);
-      const subtotal = precoUnitario.mul(quantidade);
 
-      await tx.itemComanda.create({
-        data: { comandaId, produtoId, quantidade, precoUnitario, subtotal },
+      const precoUnitario = new Prisma.Decimal(produto.preco);
+
+      // tenta achar item já existente dessa comanda para esse produto
+      const existente = await tx.itemComanda.findUnique({
+        where: { comandaId_produtoId: { comandaId, produtoId } }, // usa o @@unique
       });
 
+      if (existente) {
+        // soma quantidades e recalcula subtotal (mantém o mesmo precoUnitario do produto)
+        const novaQuantidade = existente.quantidade + quantidade;
+        const novoSubtotal = precoUnitario.mul(novaQuantidade);
+
+        await tx.itemComanda.update({
+          where: { comandaId_produtoId: { comandaId, produtoId } },
+          data: { quantidade: novaQuantidade, subtotal: novoSubtotal },
+        });
+      } else {
+
+        const subtotal = precoUnitario.mul(quantidade);
+        await tx.itemComanda.create({
+          data: { comandaId, produtoId, quantidade, precoUnitario, subtotal },
+        });
+      }
+
+      // recalcula o total da comanda (seguro e simples)
       const agg = await tx.itemComanda.aggregate({
         where: { comandaId },
         _sum: { subtotal: true },
@@ -42,31 +61,41 @@ export class ComandaService {
   }
 
   // Service
-async removerItem(comandaId: number, itemId: number) {
-  return this.prisma.$transaction(async (tx) => {
-    const item = await tx.itemComanda.findUnique({ where: { id: itemId } });
-    const comanda = await tx.comanda.findUnique({ where: { id: comandaId } });
-    
-    if (!item) throw new NotFoundException('Item não encontrado');
+  async removerItem(comandaId: number, itemId: number) {
+    return this.prisma.$transaction(async (tx) => {
+      const item = await tx.itemComanda.findUnique({ where: { id: itemId } });
+      if (!item) throw new NotFoundException('Item não encontrado');
+      if (item.comandaId !== comandaId) {
+        throw new BadRequestException('Item não pertence à comanda informada');
+      }
+      const comanda = await tx.comanda.findUnique({ where: { id: comandaId } });
+      if (!comanda || comanda.status !== 'ABERTA') throw new BadRequestException('Comanda inválida ou não está aberta');
 
-    if (item.comandaId !== comandaId) {
-      throw new BadRequestException('Item não pertence à comanda informada');
-    }
-    if (!comanda || comanda.status !== 'ABERTA') throw new BadRequestException('Comanda inválida ou não está aberta');
+      if (item.quantidade > 1) {
+        const novaQtd = item.quantidade - 1;
+        // mantém o mesmo preço unitário e recalcula subtotal
+        const novoSubtotal = item.precoUnitario.mul(novaQtd);
+        await tx.itemComanda.update({
+          where: { id: itemId },
+          data: { quantidade: novaQtd, subtotal: novoSubtotal },
+        });
+      } else {
+        await tx.itemComanda.delete({ where: { id: itemId } });
+      }
 
-    await tx.itemComanda.delete({ where: { id: itemId } });
+      // Recalcula total da comanda
+      const agg = await tx.itemComanda.aggregate({
+        where: { comandaId },
+        _sum: { subtotal: true },
+      });
 
-    const agg = await tx.itemComanda.aggregate({
-      where: { comandaId },
-      _sum: { subtotal: true },
+      return tx.comanda.update({
+        where: { id: comandaId },
+        data: { total: agg._sum.subtotal ?? new Prisma.Decimal(0) },
+      });
     });
+  }
 
-    return tx.comanda.update({
-      where: { id: comandaId },
-      data: { total: agg._sum.subtotal ?? new Prisma.Decimal(0) },
-    });
-  });
-}
 
 
 
