@@ -3,14 +3,15 @@ import { Body, Controller, Get, Param, Patch, Post, UseGuards } from '@nestjs/co
 import { ComandaService } from './comanda.service';
 import { CreateComandaDto } from './dto/create-comanda.dto';
 import { AdicionarItemDto } from './dto/create-comanda.dto';
+
+import {ApiTags, ApiOperation, ApiBearerAuth } from '@nestjs/swagger';
 import { JwtAuthGuard } from 'src/auth/jwt-auth.guard';
-import { ApiBearerAuth, ApiTags, ApiOperation } from '@nestjs/swagger';
 
 
+@UseGuards(JwtAuthGuard)
+@ApiBearerAuth()
 
 @ApiTags("Comandas")
-@ApiBearerAuth()
-@UseGuards(JwtAuthGuard)
 @Controller('comandas')
 export class ComandaController {
   constructor(private service: ComandaService) { }
