@@ -1,5 +1,5 @@
 // comanda/comanda.controller.ts
-import { Body, Controller, Get, Param, Patch, Post, UseGuards } from '@nestjs/common';
+import { Body, Controller, Get, Param, Patch, Post, UseGuards, ParseIntPipe } from '@nestjs/common';
 import { ComandaService } from './comanda.service';
 import { CreateComandaDto } from './dto/create-comanda.dto';
 import { AdicionarItemDto } from './dto/create-comanda.dto';
@@ -35,6 +35,12 @@ export class ComandaController {
   ) {
     return this.service.removerItem(+comandaId, +itemId);
   }
+
+  @ApiOperation({summary: "Comanda por ID"})
+    @Get(':id')
+    buscarPorId(@Param('id', ParseIntPipe) id: number) {
+      return this.service.buscarPorId(id);
+    }
 
   @ApiOperation({summary: "Listar todas as comandas e seus itens"})
   @Get()

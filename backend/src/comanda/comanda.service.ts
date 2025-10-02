@@ -106,6 +106,26 @@ export class ComandaService {
     });
   }
 
+  async buscarPorId(comandaId: number) {
+    const comanda = await this.prisma.comanda.findUnique({
+      where: { id: comandaId },
+      include: {
+        itens: {
+          include: {
+            produto: {
+              select: { id: true, nome: true, preco: true }, 
+            },
+          },
+        },
+      },
+    });
+
+    if (!comanda) {
+      throw new NotFoundException('Comanda não encontrada');
+    }
+    return comanda;
+  }
+
   async fechar(comandaId: number) {
     const comanda = await this.prisma.comanda.findUnique({ where: { id: comandaId } });
     if (!comanda) throw new NotFoundException('Comanda não encontrada');

@@ -56,7 +56,7 @@ export class ProdutoController {
   }
 
 
-  @ApiOperation({summary: "Exlcuir produto"})
+  @ApiOperation({summary: "Excluir produto"})
   @Roles('admin')
   @Delete(':id')
   remover(@Param('id', ParseIntPipe) id: number) {
