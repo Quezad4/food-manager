@@ -23,7 +23,7 @@ export async function adicionarItemComanda(params: {
   produtoId: number
   quantidade: number
 }) {
-  
+
   const { data } = await api.post('comandas/adicionar-item', {
     comandaId: params.comandaId,
     produtoId: params.produtoId,
@@ -32,6 +32,27 @@ export async function adicionarItemComanda(params: {
   return data
 }
 
+
+
+export type StatusComanda = 'ABERTA'|'FECHADA'|'CANCELADA';
+
+export type Comanda = {
+  id: number;
+  usuarioId: number;
+  status: StatusComanda;
+  total: string;
+  criadaEm: string;
+  fechadaEm?: string | null;
+};
+
+export async function getComandaById(id: number) {
+  const r = await api.get(`/comandas/${id}`);
+  return r.data as Comanda;
+}
+export async function abrirComanda(usuarioId: number) {
+  const r = await api.post('/comandas/abrir', { usuarioId });
+  return r.data as Comanda; 
+}
 
 export async function obterDetalhesComanda(comandaId: number): Promise<ComandaDetalhes> {
   const { data } = await api.get(`/comandas/${comandaId}`)
@@ -43,5 +64,5 @@ export async function fecharComanda(comandaId: number) {
   const { data } = await api.patch(`/comandas/fechar/${comandaId}`)
   return data
 
-  
+
 }
