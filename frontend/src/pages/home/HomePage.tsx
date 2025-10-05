@@ -1,8 +1,8 @@
 import { useAuth } from '../../modules/auth/AuthContext';
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { Menu, UserCog, Utensils } from 'lucide-react';
 import { getComandaById, abrirComanda } from '../../services/comanda.service';
+import Sidebar from '../../components/SideBar';
 
 export default function HomePage() {
   const { payload, logout } = useAuth();
@@ -112,21 +112,7 @@ export default function HomePage() {
       </div>
 
       {/* sidebar */}
-      <aside className="flex w-36 flex-col items-center justify-between bg-orange-500 py-6 text-white">
-        <div className="flex flex-col items-center gap-6">
-          <button className="flex h-12 w-18 items-center justify-center rounded-md bg-yellow-300 text-black">
-            <Menu />
-          </button>
-          <button className="flex h-12 w-18 items-center justify-center">
-            <Utensils />
-          </button>
-        </div>
-        <div>
-          <button className="flex h-12 w-18 items-center justify-center">
-            <UserCog />
-          </button>
-        </div>
-      </aside>
+      <Sidebar/>
     </div>
   );
 }
