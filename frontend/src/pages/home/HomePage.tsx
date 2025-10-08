@@ -3,9 +3,10 @@ import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { getComandaById, abrirComanda } from '../../services/comanda.service';
 import Sidebar from '../../components/SideBar';
+import Header from '../../components/Header';
 
 export default function HomePage() {
-  const { payload, logout } = useAuth();
+  const { payload } = useAuth();
   const [comanda, setComanda] = useState<number | ''>('');
   const [erro, setErro] = useState<string | null>(null);
   const [loading, setLoading] = useState(false);
@@ -71,15 +72,7 @@ export default function HomePage() {
     <div className="flex min-h-dvh">
       {/* conteúdo principal */}
       <div className="flex-1 bg-orange-50 p-6">
-        <header className="mb-4 flex items-center justify-between">
-          <h1 className="text-xl font-semibold">FoodManager</h1>
-          <div className="flex items-center gap-3 text-sm text-gray-700">
-            <span className="font-mono">{payload?.user}</span>
-            <button onClick={logout} className="rounded-full border border-gray-300 px-3 py-1 hover:bg-gray-100">
-              Sair
-            </button>
-          </div>
-        </header>
+        <Header/>
 
         <div className="mt-8 flex flex-col items-center gap-6">
           {/* input número da comanda */}

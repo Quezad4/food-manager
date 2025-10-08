@@ -1,10 +1,11 @@
-import { Routes, Route, Navigate } from 'react-router-dom'
+import { Routes, Route, } from 'react-router-dom'
 import LoginPage from '../pages/login/LoginPage'
 import { ProtectedRoute } from './ProtectedRoutes'
 import HomePage from '../pages/home/HomePage'
 import ComandaItensPage from '../pages/comanda/ComandaItensPage'
 import ComandaDetalhesPage from '../pages/comanda/ComandaDetalhesPage'
 import ProdutosPage from '../pages/produto/ProdutosPage'
+import FuncionariosPage from '../pages/funcionarios/FuncionariosPage'
 
 
 export default function AppRoutes() {
@@ -40,6 +41,8 @@ export default function AppRoutes() {
       />
 
       <Route path="/produtos" element={<ProtectedRoute><ProdutosPage /></ProtectedRoute>} />
+
+      <Route path="/funcionarios" element={<ProtectedRoute><FuncionariosPage/></ProtectedRoute>} />
 
 
 

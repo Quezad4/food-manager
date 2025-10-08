@@ -39,9 +39,9 @@ export default function Sidebar() {
       <div>
         {/* CONFIGURAÇÕES */}
         <button
-          onClick={() => navigate('/config')}
+          onClick={() => navigate('/funcionarios')}
           className={`flex h-12 w-18 items-center justify-center rounded-md transition-colors ${
-            isActive('/config') ? 'bg-yellow-300 text-black' : 'hover:bg-orange-600'
+            isActive('/funcionarios') ? 'bg-yellow-300 text-black' : 'hover:bg-orange-600'
           }`}
           title="Configurações"
         >

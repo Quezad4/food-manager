@@ -3,6 +3,7 @@ import { Plus, Settings, Search } from 'lucide-react'
 import Modal from '../../components/Modal'
 import { criarProduto, listarProdutos, atualizarProduto, type Produto, deletarProduto } from '../../services/produto.service'
 import Sidebar from '../../components/SideBar';
+import Header from '../../components/Header';
 
 function moneyBR(v: string | number) {
     const n = parseFloat(String(v))
@@ -89,9 +90,11 @@ export default function ProdutosPage() {
     }
 
     return (
+
         <div className="flex min-h-dvh">
             {/* conteúdo principal com o “cartão” laranja */}
             <div className="flex-1 bg-orange-50 p-6">
+                <Header />
                 <div className="mx-auto w-full max-w-2xl rounded-2xl bg-orange-500 p-5 text-white shadow">
                     {/* topo: busca + botão criar */}
                     <div className="mb-4 flex items-center gap-3">
