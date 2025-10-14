@@ -5,7 +5,7 @@ export type Usuario = {
   nome: string
   cargo?: string | null
   telefone?: string | null
-  fotoUrl?: string | null
+  foto?: string | null
   isAdmin?: boolean
 }
 
@@ -18,7 +18,7 @@ export async function criarUsuario(input: {
   nome: string
   cargo?: string
   telefone?: string
-  fotoUrl?: string
+  foto?: string
   isAdmin?: boolean
   user?: string
   senha?: string
@@ -28,6 +28,8 @@ export async function criarUsuario(input: {
 }
 
 export async function atualizarUsuario(id: number, input: Partial<Usuario>) {
+  console.log("input",input)
+  console.log(id)
   const { data } = await api.patch(`/usuario/${id}`, input)
   return data as Usuario
 }

@@ -48,7 +48,7 @@ export default function ComandaDetalhesPage() {
       setEncerrando(true)
       setErro(null)
       await fecharComanda(comandaId)
-      navigate(-1) // volta pra home (ou redirecione para lista de comandas)
+      navigate(-1) 
     } catch (e: any) {
       setErro(e?.response?.data?.message || 'Falha ao encerrar a comanda')
     } finally {

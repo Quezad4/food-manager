@@ -37,6 +37,7 @@ export default function FuncionariosPage() {
         setErro(null)
         const users = await listarUsuarios()
         setLista(users)
+        console.log(users)
       } catch (e: any) {
         setErro(e?.response?.data?.message || 'Falha ao carregar funcionários')
       } finally {
@@ -49,7 +50,9 @@ export default function FuncionariosPage() {
   const filtrados = useMemo(() => {
     const t = busca.trim().toLowerCase()
     if (!t) return lista
-    return lista.filter((u) => `${u.id} ${u.nome} ${u.cargo ?? ''}`.toLowerCase().includes(t))
+    const teste = lista.filter((u) => `${u.id} ${u.nome} ${u.cargo ?? ''}`.toLowerCase().includes(t))
+    console.log(teste)
+    return teste
   }, [lista, busca])
 
   // abrir detalhes
@@ -71,6 +74,7 @@ export default function FuncionariosPage() {
   }
 
   const handleEdit = async (values: UserEditValues) => {
+    console.log("values:", values)
     if (!selecionado) return
     try {
       const upd = await atualizarUsuario(selecionado.id, values)
@@ -140,9 +144,9 @@ export default function FuncionariosPage() {
                 >
                   <div className="mb-2 font-semibold line-clamp-1">{u.nome}</div>
                   <div className="h-28 overflow-hidden rounded-md bg-white">
-                    {u.fotoUrl ? (
+                    {u.foto ? (
                       <img
-                        src={u.fotoUrl}
+                        src={u.foto}
                         alt={u.nome}
                         className="h-full w-full object-cover"
                       />
@@ -175,9 +179,9 @@ export default function FuncionariosPage() {
           <div className="space-y-4">
             <div className="flex items-start gap-4">
               <div className="h-24 w-24 overflow-hidden rounded-md bg-gray-100">
-                {selecionado.fotoUrl ? (
+                {selecionado.foto ? (
                   <img
-                    src={selecionado.fotoUrl}
+                    src={selecionado.foto}
                     alt={selecionado.nome}
                     className="h-full w-full object-cover"
                   />
@@ -228,7 +232,7 @@ export default function FuncionariosPage() {
               nome: selecionado.nome,
               cargo: selecionado.cargo,
               telefone: selecionado.telefone,
-              fotoUrl: selecionado.fotoUrl,
+              foto: selecionado.foto,
               isAdmin: selecionado.isAdmin,
               user: (selecionado as any).user, // ajuste se o campo no seu back tiver outro nome
             }}
