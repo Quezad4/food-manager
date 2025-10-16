@@ -47,6 +47,10 @@ export default function ComandaDetalhesPage() {
     try {
       setEncerrando(true)
       setErro(null)
+      const querFechar = window.confirm(
+          'A comanda será fechada, quer continuar?'
+        );
+        if (!querFechar) return;
       await fecharComanda(comandaId)
       navigate(-1) 
     } catch (e: any) {

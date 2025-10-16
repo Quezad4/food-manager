@@ -6,6 +6,7 @@ import ComandaItensPage from '../pages/comanda/ComandaItensPage'
 import ComandaDetalhesPage from '../pages/comanda/ComandaDetalhesPage'
 import ProdutosPage from '../pages/produto/ProdutosPage'
 import FuncionariosPage from '../pages/funcionarios/FuncionariosPage'
+import ComandasPage from '../pages/comanda/ComandasPage'
 
 
 export default function AppRoutes() {
@@ -43,6 +44,14 @@ export default function AppRoutes() {
       <Route path="/produtos" element={<ProtectedRoute><ProdutosPage /></ProtectedRoute>} />
 
       <Route path="/funcionarios" element={<ProtectedRoute><FuncionariosPage/></ProtectedRoute>} />
+      <Route
+        path="/comandas"
+        element={
+          <ProtectedRoute>
+            <ComandasPage />
+          </ProtectedRoute>
+        }
+      />
 
 
 

@@ -34,7 +34,7 @@ export async function adicionarItemComanda(params: {
 
 
 
-export type StatusComanda = 'ABERTA'|'FECHADA'|'CANCELADA';
+export type StatusComanda = 'ABERTA' | 'FECHADA' | 'CANCELADA';
 
 export type Comanda = {
   id: number;
@@ -45,13 +45,23 @@ export type Comanda = {
   fechadaEm?: string | null;
 };
 
+export type ComandaResumo = {
+  id: number
+  usuarioId?: number | null
+  status: StatusComanda
+  total: string | number
+  criadaEm?: string | null
+  fechadaEm?: string | null
+}
+
+
 export async function getComandaById(id: number) {
   const r = await api.get(`/comandas/${id}`);
   return r.data as Comanda;
 }
 export async function abrirComanda(usuarioId: number) {
   const r = await api.post('/comandas/abrir', { usuarioId });
-  return r.data as Comanda; 
+  return r.data as Comanda;
 }
 
 export async function obterDetalhesComanda(comandaId: number): Promise<ComandaDetalhes> {
@@ -65,4 +75,14 @@ export async function fecharComanda(comandaId: number) {
   return data
 
 
+}
+
+export async function listarComandas(params?: {
+  q?: string
+  status?: ComandaResumo['status'] | 'ABERTAS' // ativas = não fechadas/canceladas
+  page?: number
+  perPage?: number
+}): Promise<ComandaResumo[]> {
+  const { data } = await api.get('/comandas', { params })
+  return data
 }

@@ -1,9 +1,11 @@
-import { Menu, Utensils, UserCog } from 'lucide-react'
+import { Menu, Utensils, UserCog, ListOrdered } from 'lucide-react'
 import { useNavigate, useLocation } from 'react-router-dom'
+import { useAuth } from '../modules/auth/AuthContext'
 
 export default function Sidebar() {
   const navigate = useNavigate()
   const location = useLocation()
+  const {payload} = useAuth()
 
   // define as rotas dos ícones
   const isActive = (path: string) => location.pathname.startsWith(path)
@@ -24,6 +26,7 @@ export default function Sidebar() {
         </button>
 
         {/* PRODUTOS */}
+        {payload?.isAdmin &&
         <button
           onClick={() => navigate('/produtos')}
           className={`flex h-12 w-18 items-center justify-center rounded-md transition-colors ${
@@ -33,11 +36,22 @@ export default function Sidebar() {
         >
           <Utensils />
         </button>
+        }
+
+        <button
+          onClick={() => navigate('/comandas')}
+          className={`flex h-12 w-18 items-center justify-center rounded-md transition-colors ${
+            isActive('/comandas') ? 'bg-yellow-300 text-black' : 'hover:bg-orange-600'
+          }`}
+          title="Comandas"
+        >
+          <ListOrdered />
+        </button>
       </div>
 
       {/* base */}
       <div>
-        {/* CONFIGURAÇÕES */}
+        {payload?.isAdmin &&
         <button
           onClick={() => navigate('/funcionarios')}
           className={`flex h-12 w-18 items-center justify-center rounded-md transition-colors ${
@@ -47,6 +61,8 @@ export default function Sidebar() {
         >
           <UserCog />
         </button>
+        }
+        
       </div>
     </aside>
   )
