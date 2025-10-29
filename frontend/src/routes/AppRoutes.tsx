@@ -7,7 +7,7 @@ import ComandaDetalhesPage from '../pages/comanda/ComandaDetalhesPage'
 import ProdutosPage from '../pages/produto/ProdutosPage'
 import FuncionariosPage from '../pages/funcionarios/FuncionariosPage'
 import ComandasPage from '../pages/comanda/ComandasPage'
-
+import RelatoriosLocalPage from '../pages/relatorios/RelatoriosLocalPage'
 
 export default function AppRoutes() {
   return (
@@ -43,12 +43,20 @@ export default function AppRoutes() {
 
       <Route path="/produtos" element={<ProtectedRoute><ProdutosPage /></ProtectedRoute>} />
 
-      <Route path="/funcionarios" element={<ProtectedRoute><FuncionariosPage/></ProtectedRoute>} />
+      <Route path="/funcionarios" element={<ProtectedRoute><FuncionariosPage /></ProtectedRoute>} />
       <Route
         path="/comandas"
         element={
           <ProtectedRoute>
             <ComandasPage />
+          </ProtectedRoute>
+        }
+      />
+      <Route
+        path="/relatorios"
+        element={
+          <ProtectedRoute>
+            <RelatoriosLocalPage />
           </ProtectedRoute>
         }
       />
