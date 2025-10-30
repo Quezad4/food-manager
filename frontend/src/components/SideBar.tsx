@@ -55,13 +55,8 @@ export default function Sidebar() {
         >
           <ChartAreaIcon />
         </button>}
-      </div>
 
-
-
-      {/* base */}
-      <div>
-        {payload?.isAdmin &&
+          {payload?.isAdmin &&
           <button
             onClick={() => navigate('/funcionarios')}
             className={`flex h-12 w-18 items-center justify-center rounded-md transition-colors ${isActive('/funcionarios') ? 'bg-yellow-300 text-black' : 'hover:bg-orange-600'
@@ -73,6 +68,7 @@ export default function Sidebar() {
         }
 
       </div>
+
     </aside>
   )
 }
