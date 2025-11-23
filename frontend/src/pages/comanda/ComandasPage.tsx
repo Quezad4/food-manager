@@ -19,35 +19,49 @@ function badgeColor(status: ComandaResumo['status']) {
 
 export default function ComandasPage() {
   const navigate = useNavigate()
-
-  // ABERTA | FECHADA
   const [filtro, setFiltro] = useState<'ABERTA' | 'FECHADA'>('ABERTA')
-
   const [lista, setLista] = useState<ComandaResumo[]>([])
   const [loading, setLoading] = useState(true)
   const [erro, setErro] = useState<string | null>(null)
 
-  // carrega quando o filtro muda
+  // carrega 1x e sempre que o filtro mudar
+  const load = async () => {
+    try {
+      setErro(null)
+      const res = await listarComandas({ status: filtro })
+      setLista(res)
+    } catch (e: any) {
+      setErro(e?.response?.data?.message || 'Falha ao carregar comandas')
+    } finally {
+      setLoading(false)
+    }
+  }
+
   useEffect(() => {
-    (async () => {
-      try {
-        setLoading(true); setErro(null)
-        const res = await listarComandas({ status: filtro })
-        setLista(res)
-      } catch (e: any) {
-        setErro(e?.response?.data?.message || 'Falha ao carregar comandas')
-      } finally {
-        setLoading(false)
-      }
-    })()
+    setLoading(true)
+    load()
   }, [filtro])
 
-  // fallback: se o backend ainda não filtrar por status, filtramos aqui também
-  const exibidas = useMemo(
-    () => lista.filter(c => c.status === filtro),
-    [lista, filtro]
-  )
 
+  useEffect(() => {
+    const id = setInterval(load, 5000) 
+    const onFocus = () => load()
+    const onVisibility = () => {
+      if (document.visibilityState === 'visible') load()
+    }
+
+    window.addEventListener('focus', onFocus)
+    document.addEventListener('visibilitychange', onVisibility)
+
+    return () => {
+      clearInterval(id)
+      window.removeEventListener('focus', onFocus)
+      document.removeEventListener('visibilitychange', onVisibility)
+    }
+    
+  }, [filtro]) 
+
+  const exibidas = useMemo(() => lista.filter(c => c.status === filtro), [lista, filtro])
   return (
     <div className="flex min-h-dvh">
       <div className="flex-1 bg-orange-50">
