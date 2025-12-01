@@ -26,7 +26,6 @@ function parseNum(v: string | number | null | undefined): number {
   return Number.isFinite(n) ? n : 0
 }
 
-// Limita concorrência de fetchs (para não sobrecarregar API)
 async function mapWithConcurrency<T, R>(arr: T[], limit: number, fn: (x: T) => Promise<R>): Promise<R[]> {
   const ret: R[] = []
   let i = 0
@@ -56,13 +55,16 @@ export default function RelatoriosLocalPage() {
   const [detalhes, setDetalhes] = useState<ComandaDetalhes[]>([])
 
   const [detalhes2, setDetalhes2] = useState<ComandaResumo[]>([])
+  const [detalhes3, setDetalhes3] = useState<ComandaResumo[]>([])
+ 
 
   // KPIs e gráficos (derivados)
   const kpis = useMemo(() => {
     const totalFaturado = detalhes.reduce((acc, c) => acc + parseNum(c.total), 0)
     const ticketMedio = detalhes.length ? totalFaturado / detalhes.length : 0
+  
     return {
-      abertas: 0,
+      abertas: detalhes3.length,
       fechadas: detalhes.length,
       faturado: totalFaturado,
       ticketMedio,
@@ -111,15 +113,24 @@ export default function RelatoriosLocalPage() {
       setLoading(true)
       setErro(null)
 
-      // 1) lista só FECHADAS (se o back não filtrar por período, aplicamos no front)
+  
       const lista = await listarComandas()
       const listaFechada = lista.filter(comanda => comanda.status === "FECHADA")
+      const listaAberta = lista.filter(comanda => comanda.status === "ABERTA")
       console.log(listaFechada)
       // filtro front por data (com base em fechadaEm ou abertaEm)
       const ini = de ? new Date(de + 'T00:00:00') : null
       const fim = ate ? new Date(ate + 'T23:59:59') : null
 
       const listaFiltrada = listaFechada.filter((c) => {
+        const ref = (c as any).fechadaEm
+        if (!ref) return true
+        const d = new Date(ref)
+        if (ini && d < ini) return false
+        if (fim && d > fim) return false
+        return true
+      })
+      const listaFiltrada2 = listaAberta.filter((c) => {
         const ref = (c as any).fechadaEm
         if (!ref) return true
         const d = new Date(ref)
@@ -137,6 +148,7 @@ export default function RelatoriosLocalPage() {
       )
       setDetalhes(detalhesArr)
       setDetalhes2(listaFiltrada)
+      setDetalhes3(listaFiltrada2)
     } catch (e: any) {
       setErro(e?.response?.data?.message || 'Falha ao carregar relatórios (front)')
     } finally {
