@@ -105,6 +105,73 @@ Use o token para acessar as rotas protegidas.
 
 ---
 
+
+# FoodManager - Frontend
+
+## 💻 Tecnologias Utilizadas
+
+- **React**: Biblioteca JavaScript para construção de interfaces de usuário.
+- **Vite**: Ferramenta de bundling e desenvolvimento, com foco em performance.
+- **TypeScript**: Linguagem de programação que adiciona tipagem estática ao JavaScript.
+- **Tailwind CSS**: Framework de CSS utilitário para criação de layouts rápidos e responsivos.
+- **React Router**: Biblioteca para gerenciamento de navegação no React.
+- **Axios**: Biblioteca para realizar requisições HTTP.
+
+## 🚀 Como Executar o Projeto
+
+### Requisitos
+
+- **Node.js**: Versão >= 16.0.0
+- **npm** ou **yarn**: Gerenciador de pacotes
+
+### Passos para Instalar e Rodar
+
+1. **Clone o repositório**:
+    ```bash
+    git clone https://github.com/usuario/foodmanager-frontend.git
+    ```
+
+2. **Navegue até o diretório do projeto**:
+    ```bash
+    cd food-manager/frontend
+    ```
+
+3. **Instale as dependências**:
+    Se estiver usando **npm**:
+    ```bash
+    npm install
+    ```
+
+    Ou se estiver usando **yarn**:
+    ```bash
+    yarn install
+    ```
+
+4. **Rodando o projeto**:
+    Para iniciar o servidor de desenvolvimento:
+    Se estiver usando **npm**:
+    ```bash
+    npm run dev
+    ```
+
+    Ou se estiver usando **yarn**:
+    ```bash
+    yarn dev
+    ```
+
+    O aplicativo será iniciado em [http://localhost:3001](http://localhost:3001).
+    
+## 🧑‍💻 Funcionalidades
+
+O frontend do **FoodManager** oferece as seguintes funcionalidades principais:
+
+- **Login**: Tela de autenticação com validação de credenciais.
+- **Tela Principal**: Interface para gerenciamento de comandas, onde o usuário pode abrir, editar, e finalizar pedidos.
+- **Gestão de Produtos**: Exibição e adição de produtos ao sistema de comandas.
+- **Relatórios**: Visualização de relatórios financeiros e de vendas.
+- **Gerenciamento de Funcionários**: Adicionar, editar ou remover usuários do sistema com diferentes permissões.
+
+
 ## 👨‍💻 Autor
 
 Projeto desenvolvido por Mateus Del Campo Quezada <br/>
