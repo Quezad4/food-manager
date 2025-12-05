@@ -15,8 +15,8 @@ async function bootstrap() {
 
     app.enableCors({
       origin: [
-        'http://localhost:5173',
-        'http://192.168.0.113:5173', // IP do Vite na rede
+        'http://localhost:3001',
+        'http://192.168.181.201:3001', // IP do Vite na rede
       ],
       methods: 'GET,HEAD,PUT,PATCH,POST,DELETE,OPTIONS',
       allowedHeaders: '*',

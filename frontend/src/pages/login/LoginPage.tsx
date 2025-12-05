@@ -75,7 +75,7 @@ export default function LoginPage() {
           </button>
 
           <p className="mt-4 text-center text-xs text-gray-600">
-            API: <code>{import.meta.env.VITE_API_URL || 'http://localhost:3000'}</code>
+           
           </p>
 
   
